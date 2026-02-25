@@ -2,84 +2,101 @@ package com.lab.collection.map;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.lang.reflect.Field;
 
 /**
- * HashMap 结构验证 Demo
- * 用于面试演示：数组 + 链表 + 红黑树 的基本概念
+ * Demo: 验证 HashMap 基础结构 (懒加载 + 容量对齐)
+ *
+ * 核心验证点：
+ * 1. 懒加载：new 之后 table 为 null，首次 put 才初始化。
+ * 2. 容量对齐：传入容量会自动调整为最近的 2 的幂。
  *
  * @author BQHM
- * @date 2026-02-24
+ * @date 2026-02-25
  */
 public class HashMapStructureDemo {
 
-    public static void main(String[] args) {
-        testLazyLoad();
-        testResize();
-        testCollision();
+    public static void main(String[] args) throws Exception {
+        testLazyLoadAndAlignment();
     }
 
+    public static void testLazyLoadAndAlignment() throws Exception {
+        System.out.println("=== 开始验证基础结构 (懒加载 + 容量对齐) ===");
 
-    public static void testLazyLoad() {
-        System.out.println("=== 实验一：验证懒加载 ===");
-        // 1. 创建 Map，指定初始容量为 2 (方便观察)
-        // 注意：HashMap 实际容量会自动扩容为最近的 2 的幂，所以 2->2, 3->4
+        // 【实验 1】验证懒加载
+        // 传入初始容量 2 (它是 2 的幂，所以实际容量就是 2)
+        System.out.println("\n1. 执行 new HashMap<>(2)...");
         Map<String, String> map = new HashMap<>(2);
 
-        System.out.println("1. 创建后，未 put 任何数据。此时 table 数组应该为 null。");
-        // TODO: 在这里打断点，运行后查看 'map' 对象的 'table' 字段是否为 null
+        System.out.println("   -> 此时检查 Table:");
+        printTableStatus(map); // 预期：null
 
-        // 2. 放入第一个数据
+        // 【实验 2】验证首次 Put 触发初始化
+        System.out.println("\n2. 执行 map.put(\"key1\", \"value1\")...");
         map.put("key1", "value1");
-        System.out.println("2. 放入第一个数据后，触发初始化。");
-        // TODO: 再次打断点，查看 'table' 字段，长度应该是 2 或 4
+
+        System.out.println("   -> 此时检查 Table:");
+        int currentLen = printTableStatus(map); // 预期：2
+
+        // 【实验 3】验证阈值
+        System.out.println("\n3. 检查阈值 (Threshold):");
+        printThreshold(map);
+        System.out.println("   -> 解释：容量 2 * 0.75 = 1.5，向下取整为 1。");
+        System.out.println("   -> 意味着：再放 1 个元素 (总共 2 个) 就会触发扩容！");
+
+        // 【实验 4】验证容量非 2 的幂时的自动对齐 (可选)
+        System.out.println("\n4. 额外测试：new HashMap<>(3)...");
+        Map<String, String> map2 = new HashMap<>(3);
+        map2.put("x", "y"); // 触发初始化
+        System.out.print("   -> 传入 3，实际初始化为：");
+        printTableLength(map2);
+        System.out.println("   -> 结论：自动对齐到最近的 2 的幂 (4)。");
+
+        System.out.println("\n=== 基础结构验证结束 ===");
     }
 
-    public static void testResize() {
+    /**
+     * 🔮 魔法方法：打印 Table 数组状态 (长度 或 null)
+     */
+    private static int printTableStatus(Map<?, ?> map) throws Exception {
+        Class<?> clazz = map.getClass();
+        Field tableField = clazz.getDeclaredField("table");
+        tableField.setAccessible(true);
+        Object table = tableField.get(map);
 
-        System.out.println("\n=== 实验二：验证扩容机制 ===");
-        // 1. 创建容量为 4 的 Map，阈值 = 4 * 0.75 = 3
-        Map<Integer, String> map = new HashMap<>(4);
-
-        System.out.println("开始放入数据...");
-        for (int i = 0; i < 6; i++) {
-            map.put(i, "Value" + i);
-            System.out.println("放入 key=" + i + ", 当前 size=" + map.size());
-            // TODO: 每次循环都打断点，观察 table 数组长度的变化
+        if (table == null) {
+            System.out.println("      📏 Table 状态：null (尚未初始化，验证了【懒加载】)");
+            return 0;
+        } else {
+            int len = java.lang.reflect.Array.getLength(table);
+            System.out.println("      📏 Table 状态：Node[" + len + "] (已初始化)");
+            return len;
         }
     }
 
-    // 内部静态类，专门用来制造冲突
-    static class BadKey {
-        int id;
-        public BadKey(int id) { this.id = id; }
+    /**
+     * 🔮 辅助方法：只打印长度
+     */
+    private static void printTableLength(Map<?, ?> map) throws Exception {
+        Class<?> clazz = map.getClass();
+        Field tableField = clazz.getDeclaredField("table");
+        tableField.setAccessible(true);
+        Object table = tableField.get(map);
 
-        // 作弊！让所有对象的 hash 值都一样
-        @Override
-        public int hashCode() {
-            return 1;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            return this.id == ((BadKey)o).id;
-        }
-
-        @Override
-        public String toString() {
-            return "Key-" + id;
+        if (table != null) {
+            int len = java.lang.reflect.Array.getLength(table);
+            System.out.println(len);
         }
     }
 
-    public static void testCollision() {
-        System.out.println("\n=== 实验三：验证哈希冲突与链表 ===");
-        Map<BadKey, String> map = new HashMap<>(4);
-
-        // 放入 5 个 key，它们的 hashCode 都是 1，必然冲突！
-        for (int i = 0; i < 5; i++) {
-            map.put(new BadKey(i), "Value" + i);
-        }
-
-        System.out.println("放入 5 个冲突 Key 完成。");
-        // TODO: 打断点，观察 table[1] 位置，是否变成了一个链表结构 (Node -> Node -> Node...)
+    /**
+     * 🔮 辅助方法：打印阈值
+     */
+    private static void printThreshold(Map<?, ?> map) throws Exception {
+        Class<?> clazz = map.getClass();
+        Field thresholdField = clazz.getDeclaredField("threshold");
+        thresholdField.setAccessible(true);
+        int threshold = thresholdField.getInt(map);
+        System.out.println("      🚩 当前 Threshold: " + threshold);
     }
 }
