@@ -7,8 +7,8 @@ import java.util.Map;
  * HashMap 结构验证 Demo
  * 用于面试演示：数组 + 链表 + 红黑树 的基本概念
  *
- * @author YourName
- * @date 2026-02-25
+ * @author BQHM
+ * @date 2026-02-24
  */
 public class HashMapStructureDemo {
 
