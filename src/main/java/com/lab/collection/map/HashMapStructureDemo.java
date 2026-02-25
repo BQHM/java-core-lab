@@ -13,25 +13,72 @@ import java.util.Map;
 public class HashMapStructureDemo {
 
     public static void main(String[] args) {
-        System.out.println("=== Java Core Lab: HashMap Structure Test ===");
+        testLazyLoad();
+        testResize();
+        testCollision();
+    }
 
-        // 1. 创建一个默认容量的 HashMap (容量 16, 负载因子 0.75)
-        // 想象这是银行的 16 个柜台窗口
-        Map<String, String> map = new HashMap<>();
 
-        // 2. 放入几个数据，模拟银行账号
-        // 叫号机 (Hash 算法) 会把它们分配到不同的窗口
-        map.put("ACCT_001", "张三 - 存款账户");
-        map.put("ACCT_002", "李四 - 理财账户");
-        map.put("ACCT_003", "王五 - 贷款账户");
+    public static void testLazyLoad() {
+        System.out.println("=== 实验一：验证懒加载 ===");
+        // 1. 创建 Map，指定初始容量为 2 (方便观察)
+        // 注意：HashMap 实际容量会自动扩容为最近的 2 的幂，所以 2->2, 3->4
+        Map<String, String> map = new HashMap<>(2);
 
-        // 3. 获取数据 (O(1) 速度)
-        String accountInfo = map.get("ACCT_001");
+        System.out.println("1. 创建后，未 put 任何数据。此时 table 数组应该为 null。");
+        // TODO: 在这里打断点，运行后查看 'map' 对象的 'table' 字段是否为 null
 
-        System.out.println("查询结果：" + accountInfo);
-        System.out.println("当前 Map 大小：" + map.size());
+        // 2. 放入第一个数据
+        map.put("key1", "value1");
+        System.out.println("2. 放入第一个数据后，触发初始化。");
+        // TODO: 再次打断点，查看 'table' 字段，长度应该是 2 或 4
+    }
 
-        // 4. 准备下一步：后续我们将在这里演示扩容和冲突
-        System.out.println("=== 基础验证通过，准备开始深度测试 ===");
+    public static void testResize() {
+        System.out.println("\n=== 实验二：验证扩容机制 ===");
+        // 1. 创建容量为 4 的 Map，阈值 = 4 * 0.75 = 3
+        Map<Integer, String> map = new HashMap<>(4);
+
+        System.out.println("开始放入数据...");
+        for (int i = 0; i < 6; i++) {
+            map.put(i, "Value" + i);
+            System.out.println("放入 key=" + i + ", 当前 size=" + map.size());
+            // TODO: 每次循环都打断点，观察 table 数组长度的变化
+        }
+    }
+
+    // 内部静态类，专门用来制造冲突
+    static class BadKey {
+        int id;
+        public BadKey(int id) { this.id = id; }
+
+        // 作弊！让所有对象的 hash 值都一样
+        @Override
+        public int hashCode() {
+            return 1;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return this.id == ((BadKey)o).id;
+        }
+
+        @Override
+        public String toString() {
+            return "Key-" + id;
+        }
+    }
+
+    public static void testCollision() {
+        System.out.println("\n=== 实验三：验证哈希冲突与链表 ===");
+        Map<BadKey, String> map = new HashMap<>(4);
+
+        // 放入 5 个 key，它们的 hashCode 都是 1，必然冲突！
+        for (int i = 0; i < 5; i++) {
+            map.put(new BadKey(i), "Value" + i);
+        }
+
+        System.out.println("放入 5 个冲突 Key 完成。");
+        // TODO: 打断点，观察 table[1] 位置，是否变成了一个链表结构 (Node -> Node -> Node...)
     }
 }
