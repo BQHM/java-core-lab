@@ -35,6 +35,7 @@ public class HashMapStructureDemo {
     }
 
     public static void testResize() {
+
         System.out.println("\n=== 实验二：验证扩容机制 ===");
         // 1. 创建容量为 4 的 Map，阈值 = 4 * 0.75 = 3
         Map<Integer, String> map = new HashMap<>(4);
