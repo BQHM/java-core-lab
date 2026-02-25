@@ -16,8 +16,8 @@
 | Demo 类名 | 验证目标 | 关键结论 | 状态 |
 | :--- | :--- | :--- | :---:|
 | `HashMapStructureDemo` | 懒加载、初始容量对齐 | 首次 put 才初始化数组；容量自动转为 2 的幂 | ✅ 已完成 |
-| `HashMapResizeDemo` | 扩容机制 (Resize) | size > threshold (0.75) 时扩容，容量翻倍 | 🚧 进行中 |
-| `HashMapCollisionDemo` | 哈希冲突、尾插法 | 自定义 hashCode 制造冲突；JDK 1.8 采用尾插法 | ⬜ 待开始 |
+| `HashMapResizeDemo` | 扩容机制 (Resize) | 实测：容量4阈值3，put第4个元素时扩容 (4->8) | ✅ 已完成 |
+| `HashMapCollisionDemo` | 哈希冲突、尾插法 | 实测：BadKey冲突链顺序 1->2->3，确认为尾插法 | ✅ 已完成 |
 | `HashMapRedBlackTreeDemo` | 链表转红黑树 | 链表长度>8 且 数组容量>64 时转树 | ⬜ 待开始 |
 
 ### 2. 多线程 (Concurrency)
