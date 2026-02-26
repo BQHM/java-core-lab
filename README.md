@@ -15,10 +15,11 @@
 ### 1. 集合框架 (Collection Framework)
 | Demo 类名 | 验证目标 | 关键结论 | 状态 |
 | :--- | :--- | :--- | :---:|
-| `HashMapStructureDemo` | 懒加载、初始容量对齐 | 首次 put 才初始化数组；容量自动转为 2 的幂 | ✅ 已完成 |
-| `HashMapResizeDemo` | 扩容机制 (Resize) | 实测：容量4阈值3，put第4个元素时扩容 (4->8) | ✅ 已完成 |
-| `HashMapCollisionDemo` | 哈希冲突、尾插法 | 实测：BadKey冲突链顺序 1->2->3，确认为尾插法 | ✅ 已完成 |
-| `HashMapRedBlackTreeDemo` | 链表转红黑树 | 链表长度>8 且 数组容量>64 时转树 | ⬜ 待开始 |
+| `HashMapStructureDemo` | 懒加载、初始容量对齐 | 首次 put 才初始化；容量自动转为 2 的幂 | ✅ 已完成 |
+| `HashMapResizeDemo` | 扩容机制 (Resize) | size > threshold (0.75) 时扩容，容量翻倍 | ✅ 已完成 |
+| `HashMapCollisionDemo` | 哈希冲突、尾插法 | 自定义 hashCode 制造冲突；JDK 1.8 采用尾插法 | ✅ 已完成 |
+| `HashMapRedBlackTreeDemo` | **红黑树转化条件** | **实测：需同时满足 长度>8 且 容量>64 (八大六十四)** | ✅ 已完成 |
+| `ConcurrentHashMapSafetyDemo` | 线程安全对比 | HashMap 多线程丢数据；CHM (CAS+synchronized) 安全 | 🚧 进行中 |
 
 ### 2. 多线程 (Concurrency)
 - [ ] 待更新：线程池参数调优实验
