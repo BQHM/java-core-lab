@@ -21,7 +21,7 @@ public class HashMapStructureDemo {
     }
 
     public static void testLazyLoadAndAlignment() throws Exception {
-        System.out.println("=== 开始验证基础结构 (懒加载 + 容量对齐) ===");
+        System.out.println("=== 开始验证基础结构 (懒加载 + 容量对齐) = = =");
 
         // 【实验 1】验证懒加载
         // 传入初始容量 2 (它是 2 的幂，所以实际容量就是 2)
