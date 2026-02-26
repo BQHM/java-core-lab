@@ -82,7 +82,6 @@ public class HashMapStructureDemo {
         Field tableField = clazz.getDeclaredField("table");
         tableField.setAccessible(true);
         Object table = tableField.get(map);
-
         if (table != null) {
             int len = java.lang.reflect.Array.getLength(table);
             System.out.println(len);
