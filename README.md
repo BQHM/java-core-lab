@@ -1,8 +1,11 @@
 # ☕ Java Core Lab (Java 核心原理实验室)
 
 > 📅 创建时间：2026-02-25
+> 
 > 👤 作者：[BQHM](https://github.com/BQHM)
+> 
 > 📧 联系：2531127623@qq.com
+> 
 > 🎯 目标：通过代码实验深入理解 Java 集合、并发、JVM 等底层原理，为面试和技术进阶做准备。
 
 ## 📖 项目简介
@@ -26,9 +29,12 @@
 - **并发安全压测**：模拟 10 线程并发写入 2000 次数据，HashMap 出现数据丢失，而 ConcurrentHashMap 始终保持数据完整。
 
 ### 2. 多线程 (Concurrency)
-- [ ] 待更新：线程池参数调优实验 (ThreadPoolExecutor)
-- [ ] 待更新：锁升级过程验证 (Synchronized)
-- [ ] 待更新：ThreadLocal 内存泄漏模拟
+| Demo 类名 | 验证目标 | 关键结论 | 状态 |
+| :--- | :--- | :--- | :---:|
+| `ThreadLifecycleDemo` | **线程 6 种状态流转** | **实测验证 NEW/RUNNABLE/BLOCKED/WAITING/TIMED_WAITING/TERMINATED** | ✅ 已完成 |
+| `ThreadPoolExecutorDemo` | 线程池 7 大参数调优 | 待更新：观察核心/最大线程数及拒绝策略效果 | ⬜ 待开始 |
+| `SynchronizedLockDemo` | 锁升级过程验证 | 待更新：偏向锁 -> 轻量级锁 -> 重量级锁 | ⬜ 待开始 |
+| `ThreadLocalDemo` | 内存泄漏模拟 | 待更新：验证弱引用与 remove() 的重要性 | ⬜ 待开始 |
 
 ### 3. JVM
 - [ ] 待更新：OOM 故障模拟 (Heap & Stack)
