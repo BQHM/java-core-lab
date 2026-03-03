@@ -33,7 +33,7 @@
 | :--- | :--- | :--- | :---:|
 | `ThreadLifecycleDemo` | **线程 6 种状态流转** | **实测验证 NEW/RUNNABLE/BLOCKED/WAITING/TIMED_WAITING/TERMINATED** | ✅ 已完成 |
 | `ThreadPoolExecutorDemo` | **线程池 7 大参数与拒绝策略** | **实测验证“先核心->再队列->后最大”顺序；发现“后来者 (临时线程任务) 先执行”现象；验证 4 种拒绝策略效果** | ✅ 已完成 |
-| `SynchronizedLockDemo` | 锁升级过程验证 | 待更新：偏向锁 -> 轻量级锁 -> 重量级锁 (使用 JOL 工具) | ⬜ 待开始 |
+| `SynchronizedLockUpgradeDemo` | 锁升级过程验证 | 实测：无锁 -> 偏向锁 (JDK17 显示为 thin) -> 轻量级锁 -> 重量级锁 (fat lock) | ✅ 已完成  |
 | `ThreadLocalDemo` | 内存泄漏模拟 | 待更新：验证弱引用与 remove() 的重要性 | ⬜ 待开始 |
 
 #### 📌 D5-D6 实验亮点
