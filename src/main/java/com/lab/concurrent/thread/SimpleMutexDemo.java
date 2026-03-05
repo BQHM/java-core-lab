@@ -1,6 +1,5 @@
 package com.lab.concurrent.thread;
 
-import com.lab.concurrent.thread.SimpleMutex;
 
 /**
  * D8 验证实录：亲眼见证 AQS 如何管理线程排队

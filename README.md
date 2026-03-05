@@ -16,25 +16,29 @@
 ## 🚀 核心模块 (持续更新中)
 
 ### 1. 集合框架 (Collection Framework)
-| Demo 类名 | 验证目标 | 关键结论 | 状态 |
-| :--- | :--- | :--- | :---:|
-| `HashMapStructureDemo` | 懒加载、初始容量对齐 | 首次 put 才初始化；容量自动转为 2 的幂 | ✅ 已完成 |
-| `HashMapResizeDemo` | 扩容机制 (Resize) | size > threshold (0.75) 时扩容，容量翻倍 | ✅ 已完成 |
-| `HashMapCollisionDemo` | 哈希冲突、尾插法 | 自定义 hashCode 制造冲突；JDK 1.8 采用尾插法 | ✅ 已完成 |
-| `HashMapRedBlackTreeDemo` | 红黑树转化条件 | **实测：需同时满足 长度>8 且 容量>64 (八大六十四)** | ✅ 已完成 |
-| `ConcurrentHashMapSafetyDemo` | 线程安全对比 | **实测：HashMap 并发丢数据；CHM (CAS+synchronized) 安全** | ✅ 已完成 |
+| Demo 类名                       | 验证目标          | 关键结论                                           |  状态   |
+|:------------------------------|:--------------|:-----------------------------------------------|:-----:|
+| `HashMapStructureDemo`        | 懒加载、初始容量对齐    | 首次 put 才初始化；容量自动转为 2 的幂                        | ✅ 已完成 |
+| `HashMapResizeDemo`           | 扩容机制 (Resize) | size > threshold (0.75) 时扩容，容量翻倍               | ✅ 已完成 |
+| `HashMapCollisionDemo`        | 哈希冲突、尾插法      | 自定义 hashCode 制造冲突；JDK 1.8 采用尾插法                | ✅ 已完成 |
+| `HashMapRedBlackTreeDemo`     | 红黑树转化条件       | **实测：需同时满足 长度>8 且 容量>64 (八大六十四)**              | ✅ 已完成 |
+| `ConcurrentHashMapSafetyDemo` | 线程安全对比        | **实测：HashMap 并发丢数据；CHM (CAS+synchronized) 安全** | ✅ 已完成 |
 
 #### 📌 D1-D3 实验亮点
 - **红黑树双阈值**：通过控制变量法（容量 16 vs 128），证实了转树不仅需要链表长，还需要数组容量足够大。
 - **并发安全压测**：模拟 10 线程并发写入 2000 次数据，HashMap 出现数据丢失，而 ConcurrentHashMap 始终保持数据完整。
 
 ### 2. 多线程 (Concurrency)
-| Demo 类名 | 验证目标 | 关键结论 | 状态 |
-| :--- | :--- | :--- | :---:|
-| `ThreadLifecycleDemo` | **线程 6 种状态流转** | **实测验证 NEW/RUNNABLE/BLOCKED/WAITING/TIMED_WAITING/TERMINATED** | ✅ 已完成 |
-| `ThreadPoolExecutorDemo` | **线程池 7 大参数与拒绝策略** | **实测验证“先核心->再队列->后最大”顺序；发现“后来者 (临时线程任务) 先执行”现象；验证 4 种拒绝策略效果** | ✅ 已完成 |
-| `SynchronizedLockUpgradeDemo` | 锁升级过程验证 | 实测：无锁 -> 偏向锁 (JDK17 显示为 thin) -> 轻量级锁 -> 重量级锁 (fat lock) | ✅ 已完成  |
-| `ThreadLocalDemo` | 内存泄漏模拟 | 待更新：验证弱引用与 remove() 的重要性 | ⬜ 待开始 |
+| Demo 类名                       | 验证目标               | 关键结论                                                                                                                     |  状态   |
+|:------------------------------|:-------------------|:-------------------------------------------------------------------------------------------------------------------------|:-----:|
+| `ThreadLifecycleDemo`         | **线程 6 种状态流转**     | **实测验证 NEW/RUNNABLE/BLOCKED/WAITING/TIMED_WAITING/TERMINATED**                                                           | ✅ 已完成 |
+| `ThreadPoolExecutorDemo`      | **线程池 7 大参数与拒绝策略** | **实测验证“先核心->再队列->后最大”顺序；发现“后来者 (临时线程任务) 先执行”现象；验证 4 种拒绝策略效果**                                                            | ✅ 已完成 |
+| `SynchronizedLockUpgradeDemo` | 锁升级过程验证            | 实测：无锁 -> 偏向锁 (JDK17 显示为 thin) -> 轻量级锁 -> 重量级锁 (fat lock)                                                                 | ✅ 已完成 |
+| `ThreadLocalDemo`             | 内存泄漏模拟             | 待更新：验证弱引用与 remove() 的重要性                                                                                                 | ✅ 已完成 |
+| `SimpleMutexDemo `            | AQS 线程排队验证         | 实测：T1 拿锁 -> T2 阻塞入队 -> T1 释放 -> T2 自动唤醒拿锁；控制台日志即"CLH 队列阻塞/唤醒"实证                                                          | ✅ 已完成 |
+| `VolatileVisibilityDemo`      | volatile 三维度验证     | 实测：可见性（无 volatile 时 reader 死循环；有 volatile 立即感知）；有序性（双重检查锁防半初始化对象，NPE 验证）；原子性（volatile i++ ≠ 20000；AtomicInteger = 20000） | ✅ 已完成 |
+| `SingletonDoubleCheckDemo`    | 双重检查锁单例模式	         | 实测：volatile 防止指令重排序导致半初始化对象；10 线程并发验证单例唯一性；未加 volatile 时偶发 NPE 风险                                                        | ✅ 已完成 |
+
 
 #### 📌 D5-D6 实验亮点
 - **状态精准捕获**：通过精确控制 `sleep` 时序，成功捕获了稍纵即逝的 `BLOCKED` 状态。
