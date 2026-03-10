@@ -38,8 +38,8 @@
 | `VolatileVisibilityDemo` | volatile 三维度验证 | 可见性 (无 volatile 时 reader 死循环；有 volatile 立即感知)；有序性 (双重检查锁单例初始化对象，NPE 验证)；原子性 (volatile i++ 非原子) | ✅ 已完成 |
 | `SingletonDoubleCheckDemo` | 双重检查锁单例模式 | 实测：volatile 防止指令重排序导致半初始化对象；10 线程并发验证单例唯一性；未加 volatile 时偶发 NPE 风险 | ✅ 已完成 |
 | `ThreadLocalDemo` | 内存泄漏复现 | 实测：验证弱引用与 `remove()` 的重要性 | ✅ 已完成 |
-| `CountDownLatchMealDemo` | 主线程等待多线程完成 | 实测：验证"1 方等 N 方"核心逻辑；5 个工人线程随机完成，主线程阻塞等待计数器归 0 | ✅ 已完成 |
-| `SemaphoreParkingDemo` | 并发限流控制 | 实测：验证"最多 N 个线程同时执行"核心逻辑；10 个线程抢 3 个许可，可视化限流效果；`finally` 保证许可释放 | ✅ 已完成 |
+| `CountDownLatchDemo` | 主线程等待多线程完成 | 实测：验证"1 方等 N 方"核心逻辑；5 个工人线程随机完成，主线程阻塞等待计数器归 0 | ✅ 已完成 |
+| `SemaphoreDemo` | 并发限流控制 | 实测：验证"最多 N 个线程同时执行"核心逻辑；10 个线程抢 3 个许可，可视化限流效果；`finally` 保证许可释放 | ✅ 已完成 |
 | `CyclicBarrierGameDemo` | 多线程互相等待同步 | 实测：验证"N 方互相等"核心逻辑；3 个玩家线程到齐后执行屏障动作；验证"计数器可重置"特性，可复用屏障对象 | ✅ 已完成 |
 
 #### 📌 D5-D6 实验亮点
@@ -48,7 +48,7 @@
 - **拒绝策略实测**：对比了 `AbortPolicy` (抛异常), `CallerRunsPolicy` (调用者运行), `DiscardPolicy` (丢弃) 的实际行为，验证了 `CallerRuns` 的背压效应。
 - **线程回收验证**：观察到临时线程在空闲超过 `keepAliveTime` 后，线程池大小自动回缩至核心线程数。
 
-### D11 实验亮点
+### 📌 D11 实验亮点
 - **工具类场景化验证**：
    - `CountDownLatchDemo`：验证"主线程等子线程"，5 个工人随机完成任务，"开饭"日志始终最后输出，证明阻塞逻辑生效；
    - `SemaphoreDemo`：验证"限流"，10 个线程抢 3 个许可，控制台始终最多 3 个"抢到车位"日志，可视化限流效果；
