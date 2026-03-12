@@ -1,4 +1,4 @@
-package com.lab.collection.tool;
+package com.lab.concurrent.tool;
 
 import java.util.concurrent.CountDownLatch;
 

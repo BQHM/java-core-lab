@@ -1,4 +1,4 @@
-package com.lab.collection.tool;
+package com.lab.concurrent.tool;
 
 import java.util.concurrent.Semaphore;
 
@@ -7,14 +7,14 @@ public class SemaphoreDemo {
     public static void main(String[] args) {
         Semaphore  semaphore = new Semaphore(3);
 
-        for(int i =1 ;i<=3 ;i++){
+        for(int i =1 ;i<=5 ;i++){
             final int carId = i;
             new Thread(() -> {
                 try {
                     semaphore.acquire();
                     System.out.println("车" + carId + " → 抢到车位，停进去了");
                     // 模拟停车耗时
-                    Thread.sleep(1000);
+                    Thread.sleep(10000);
                 }catch (InterruptedException e) {
                     e.printStackTrace();
                 }finally {
